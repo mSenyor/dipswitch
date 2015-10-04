@@ -1,0 +1,37 @@
+<AppWindow>:
+	#canvas:
+		#Rectangle:
+			#source: 'ass2Dface.png'
+			#size: root.width, root.height
+	AddressPanel:
+		id: address1
+		#size: root.width, root.height / 2
+		#size: root.width / 2, self.height
+		center_x: root.width / 2
+		y: root.height - self.height
+
+	DipSwitchPanel:
+		id: dipswitch1
+		center_x: root.width / 2
+		y: root.height - self.height - address1.height
+
+
+<AddressPanel>:
+	canvas:
+		Rectangle:
+			source: 'ass2Dface.png'
+			#size: root.width, root.height
+			size: self.size
+			pos: self.pos
+
+
+
+<DipSwitchPanel>:
+	canvas:
+		Rectangle:
+			source: 'ass2Dface.png'
+			#size: root.width, root.height
+			size: self.size
+			pos: self.pos
+
+
