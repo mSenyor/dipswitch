@@ -1,37 +1,17 @@
-<AppWindow>:
-	#canvas:
-		#Rectangle:
-			#source: 'ass2Dface.png'
-			#size: root.width, root.height
-	AddressPanel:
-		id: address1
-		#size: root.width, root.height / 2
-		#size: root.width / 2, self.height
-		center_x: root.width / 2
-		y: root.height - self.height
-
-	DipSwitchPanel:
-		id: dipswitch1
-		center_x: root.width / 2
-		y: root.height - self.height - address1.height
 
 
-<AddressPanel>:
-	canvas:
-		Rectangle:
-			source: 'ass2Dface.png'
-			#size: root.width, root.height
-			size: self.size
-			pos: self.pos
+<MainView>:
+	orientation: 'vertical'
+	TextInput:
+		id: address
+		size_hint_y: None
+		height: 100
+		font_size: 70
+		text: '0'
+		on_text: root.input_to_binary()
 
-
-
-<DipSwitchPanel>:
-	canvas:
-		Rectangle:
-			source: 'ass2Dface.png'
-			#size: root.width, root.height
-			size: self.size
-			pos: self.pos
-
-
+	Label:
+		id: binary
+		font_size: 150
+		text: '0'
+		
