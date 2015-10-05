@@ -7,37 +7,83 @@
 		id: toggles
 			
 
-	###TextInput:
-		###id: address
-		###size_hint_y: None
-		###height: 100
-		###font_size: 70
-		###text: '0'
-		###on_text: root.input_to_binary()
-
-	Label:
+	#Label:
+	DipSwitchPanel:
 		id: binary
-		font_size: 150
-		text: '000000000'
+		size_hint_y: None
+		height: root.height - 300
+		#id: binary
+		#font_size: 150
+		#text: '000000000'
 		
+
+<DipSwitchPanel>:
+
+	SingleSwitch:
+		id: test
+		
+
+	SingleSwitch:
+		
+	SingleSwitch:
+		
+	SingleSwitch:
+		
+	SingleSwitch:
+		
+	SingleSwitch:
+		
+	SingleSwitch:
+		
+	SingleSwitch:
+		
+	SingleSwitch:
+
+<SingleSwitch>:
+	orientation: 'vertical'
+	Label:
+		id: name
+	Switch:		
+		id: val
+
+<Switch>:
+	canvas.before:
+		PushMatrix
+		Rotate:
+			angle: 90
+			origin: self.center
+	canvas.after:
+		PopMatrix
+
+	
+	
 <TogglesPanel>:
 	Button:
 		id: all_up
 		size_hint_x: None
 		width: 70
+		size_hint_y: None
+		height: 300
 		text: '<'
 		font_size: 60
 		on_press: panel.all_up()
 
 	MidPanel:
 		id: panel
+		size_hint_y: None
+		height: 300
 	Button:
 		id: all_down
 		size_hint_x: None
+		size_hint_y: None
+		height: 300
 		width: 70
 		text: '>'
 		font_size: 60
 		on_press: panel.all_down()
+
+	#size: self.size
+	#pos: self.pos
 
 <MidPanel>:
 	orientation: 'vertical'
@@ -62,7 +108,7 @@
 
 	Label:
 		id: address
-		text: '500'
+		text: '001'
 		font_size: 180
 	DownButtons:
 		size_hint_y: None

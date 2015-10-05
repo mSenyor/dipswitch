@@ -4,7 +4,27 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 
+int_address=1
+bin_address='{0:09b}'.format(int_address)
+
+def update_address(num):
+    global int_address
+    global bin_address
+    print "old address: %d" % int_address
+    print "old dipswitch: %s" % bin_address
+    int_address=num
+    if int_address >= 1 and int_address <= 511:
+        bin_address='{0:09b}'.format(int_address)
+    elif int_address == 0 or int_address >= 512:
+        bin_address='{0:09b}'.format(0)
+
+    print "new address: %d" % int_address
+    print "new dipswitch: %s" % bin_address
+ 
 def text_to_address(string):
+    if int(string)>= 512:
+        return 0
+
     hund = int(string[0])
     tens = int(string[1])
     ones = int(string[2])
@@ -23,7 +43,10 @@ def address_to_text(add):
             hund = 0
         else:
             hund=add/100
-    return str(hund)+str(tens)+str(ones)
+    out = str(hund)+str(tens)+str(ones)
+    if int(out) >= 512 or int(out) == 0:
+        return '512'
+    return out
     
 
 
@@ -35,17 +58,27 @@ class MidPanel(BoxLayout):
         stuff=self.ids['address']
         curr_add=text_to_address(stuff.text)
         if curr_add < 511:
-            stuff.text = address_to_text(curr_add+1)
+            curr_add+=1
+            stuff.text = address_to_text(curr_add)
         else:
-            stuff.text = '000'
+            curr_add=0
+            stuff.text = '512'
+        print curr_add
+        update_address(curr_add)
+
 
     def all_down(self):
         stuff=self.ids['address']
         curr_add=text_to_address(stuff.text)
-        if curr_add > 000 and curr_add < 512:
-            stuff.text = address_to_text(curr_add-1)
+        if curr_add > 0 and curr_add < 512:
+            curr_add-=1
+            stuff.text = address_to_text(curr_add)
         else:
+            curr_add=511
             stuff.text = '511'
+        print curr_add
+        update_address(curr_add)
+
 
     def hund_up(self):
         stuff=self.ids['address']
@@ -56,29 +89,72 @@ class MidPanel(BoxLayout):
             hund+=1
         else:
             hund=0
-        stuff.text = str(hund)+str(tens)+str(ones)
+        
+        add_str = str(hund)+str(tens)+str(ones)
+        curr_add = text_to_address(add_str)
+        update_address(curr_add)
+        if curr_add >= 1 and curr_add <= 511:
+            stuff.text = add_str
+        else:
+            stuff.text = '512'
 
     def tens_up(self):
         stuff=self.ids['address']
         hund=int(stuff.text[0])
         tens=int(stuff.text[1])
         ones=int(stuff.text[2])
-        if tens != 9:
-            tens+=1
+        if hund != 5:
+            if tens != 9:
+                tens+=1
+            else:
+                tens=0
         else:
-            tens=0
-        stuff.text = str(hund)+str(tens)+str(ones)
+            if tens > 0:
+                tens=0
+            else:
+                tens=1
+        add_str = str(hund)+str(tens)+str(ones)
+        curr_add = text_to_address(add_str)
+        update_address(curr_add)
+
+        if curr_add >= 1 and curr_add <= 511:
+            stuff.text = add_str
+        else:
+            stuff.text = '512'
+
+
 
     def ones_up(self):
         stuff=self.ids['address']
         hund=int(stuff.text[0])
         tens=int(stuff.text[1])
         ones=int(stuff.text[2])
-        if ones != 9:
-            ones+=1
+        if hund != 5:
+            if ones != 9:
+                ones+=1
+            else:
+                ones=0
         else:
-            ones=0
-        stuff.text = str(hund)+str(tens)+str(ones)
+            if tens == 0:
+                if ones != 9:
+                    ones+=1
+                else:
+                    ones=0
+            else:
+                if ones <= 1:
+                    ones += 1
+                else:
+                    ones=0
+        add_str = str(hund)+str(tens)+str(ones)
+        curr_add = text_to_address(add_str)
+        update_address(curr_add)
+
+        if curr_add >= 1 and curr_add <= 511:
+            stuff.text = add_str
+        else:
+            stuff.text = '512'
+
+
 
     def hund_down(self):
         stuff=self.ids['address']
@@ -89,7 +165,16 @@ class MidPanel(BoxLayout):
             hund-=1
         else:
             hund=5
-        stuff.text = str(hund)+str(tens)+str(ones)
+        add_str = str(hund)+str(tens)+str(ones)
+        curr_add = text_to_address(add_str)
+        update_address(curr_add)
+
+        if curr_add >= 1 and curr_add <= 511:
+            stuff.text = add_str
+        else:
+            stuff.text = '512'
+
+
 
     def tens_down(self):
         stuff=self.ids['address']
@@ -100,7 +185,16 @@ class MidPanel(BoxLayout):
             tens-=1
         else:
             tens=9
-        stuff.text = str(hund)+str(tens)+str(ones)
+        add_str = str(hund)+str(tens)+str(ones)
+        curr_add = text_to_address(add_str)
+        update_address(curr_add)
+
+        if curr_add >= 1 and curr_add <= 511:
+            stuff.text = add_str
+        else:
+            stuff.text = '512'
+
+
 
     def ones_down(self):
         stuff=self.ids['address']
@@ -111,7 +205,16 @@ class MidPanel(BoxLayout):
             ones-=1
         else:
             ones=9
-        stuff.text = str(hund)+str(tens)+str(ones)
+        add_str = str(hund)+str(tens)+str(ones)
+        curr_add = text_to_address(add_str)
+        update_address(curr_add)
+
+        if curr_add >= 1 and curr_add <= 511:
+            stuff.text = add_str
+        else:
+            stuff.text = '512'
+
+
 
 
 
@@ -124,9 +227,24 @@ class DownButtons(BoxLayout):
 class ButtonRow(BoxLayout):
     pass
 
+class DipSwitchPanel(BoxLayout):
+    pass
+    #switch_1=0
+    #switch_2=0
+    #switch_4=0
+    #switch_8=0
+    #switch_16=0
+    #switch_32=0
+    #switch_64=0
+    #switch_128=0
 
+class SingleSwitch(BoxLayout):
+    pass
 
 class MainView(BoxLayout):
+    add_panel = TogglesPanel()
+    bin_panel = DipSwitchPanel()
+
     pass
 
     ###def input_to_binary(self):
